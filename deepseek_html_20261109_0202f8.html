@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CryptoLearn — Sign in</title>
+<style>
+  :root {
+    --bg: #0a0b0d;
+    --card: #14161a;
+    --border: #2a2d34;
+    --text: #ffffff;
+    --muted: #8a8f98;
+    --accent: #0052ff;
+    --accent-hover: #0043d1;
+    --danger: #f0616d;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .logo {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+  }
+
+  .card h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .card p.subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .field { margin-bottom: 18px; }
+
+  .field label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .field input {
+    width: 100%;
+    padding: 12px 14px;
+    background: #0a0b0d;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .field input:focus { border-color: var(--accent); }
+  .field input.invalid { border-color: var(--danger); }
+
+  .error {
+    color: var(--danger);
+    font-size: 12px;
+    margin-top: 6px;
+    display: none;
+  }
+  .error.show { display: block; }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+    font-size: 13px;
+  }
+
+  .row label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .row input[type="checkbox"] { accent-color: var(--accent); }
+
+  .row a { color: var(--accent); text-decoration: none; }
+  .row a:hover { text-decoration: underline; }
+
+  button.submit {
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  button.submit:hover { background: var(--accent-hover); }
+  button.submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 12px;
+    margin: 22px 0;
+  }
+  .divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .secondary {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .secondary:hover { background: #1c1f24; }
+
+  .foot {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .foot a { color: var(--accent); text-decoration: none; }
+  .foot a:hover { text-decoration: underline; }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+  <div class="logo">
+    <span class="logo-mark">C</span>
+    CryptoLearn
+  </div>
+
+  <div class="card">
+    <h1>Sign in to CryptoLearn</h1>
+    <p class="subtitle">Welcome back. Enter your details to continue.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+        <div class="error" id="emailError">Please enter a valid email address.</div>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" />
+        <div class="error" id="passwordError">Password must be at least 8 characters.</div>
+      </div>
+
+      <div class="row">
+        <label>
+          <input type="checkbox" id="remember" />
+          Remember me
+        </label>
+        <a href="#" id="forgotLink">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="submit" id="submitBtn">Sign in</button>
+    </form>
+
+    <div class="divider">or</div>
+
+    <button class="secondary" id="createBtn">Create an account</button>
+
+    <div class="foot">
+      By continuing you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Signed in (demo only)</div>
+
+<script>
+  const form = document.getElementById('loginForm');
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
+  const submitBtn = document.getElementById('submitBtn');
+  const toast = document.getElementById('toast');
+  const createBtn = document.getElementById('createBtn');
+  const forgotLink = document.getElementById('forgotLink');
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  function validateEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let valid = true;
+
+    if (!validateEmail(email.value.trim())) {
+      email.classList.add('invalid');
+      emailError.classList.add('show');
+      valid = false;
+    } else {
+      email.classList.remove('invalid');
+      emailError.classList.remove('show');
+    }
+
+    if (password.value.length < 8) {
+      password.classList.add('invalid');
+      passwordError.classList.add('show');
+      valid = false;
+    } else {
+      password.classList.remove('invalid');
+      passwordError.classList.remove('show');
+    }
+
+    if (valid) {
+      // Demo only — no real authentication or data transmission.
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in...';
+      setTimeout(() => {
+        showToast('Welcome back! (demo only)');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign in';
+      }, 800);
+    }
+  });
+
+  email.addEventListener('input', () => {
+    email.classList.remove('invalid');
+    emailError.classList.remove('show');
+  });
+  password.addEventListener('input', () => {
+    password.classList.remove('invalid');
+    passwordError.classList.remove('show');
+  });
+
+  createBtn.addEventListener('click', () => showToast('Sign-up flow not implemented (demo)'));
+  forgotLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    showToast('Password reset not implemented (demo)');
+  });
+</script>
+</body>
+</html>
